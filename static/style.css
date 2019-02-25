@@ -1,0 +1,73 @@
+html, body{
+    font-family: 'Roboto Mono', monospace;
+    color:#646464;
+}
+
+.title{
+    text-align:center;
+}
+
+.title h1{
+    font-size:20px;
+}
+
+.title small{
+    font-size: 14px;
+}
+
+
+.general{
+    width:80%;
+    margin:30px auto;
+    display:flex;
+    justify-content: space-between;
+}
+.results{
+    width:80%;
+    height:auto;
+    margin:20px auto;
+}
+
+
+.results-pos {
+    margin:20px auto;
+    display:flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+}
+
+.results .state{
+    float:left;
+    width:40%;
+    height:auto;
+}
+
+.results .state .name{
+    font-size: 2em;
+    margin: 10px 0px;
+}
+
+.vote_counts{
+    margin: 20px auto;
+}
+
+.vote_counts div{  
+    display: flex;
+    width:100%;
+    justify-content: space-between;
+}
+
+.states-stat{
+    width:100%;
+    text-align:center;
+}
+
+.states-stat span:first-child{
+    font-size:20px;
+    display:block;
+}
+
+.states-stat span:last-child{
+    font-size:40px;
+    display:block;
+}

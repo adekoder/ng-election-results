@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Inec results</title>
+    <link href="https://fonts.googleapis.com/css?family=Roboto+Mono" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css')}}">
+</head>
+
+<body>
+    <div class="title">
+        <h1>
+            Nigeria Election results (2019)
+        </h1>
+        <small>(Disclaimer) As scrapped from the inec tweet of the results</small>
+    </div>
+
+    <div class="general">
+        <div class="states-stat">
+            <span>
+                Total States
+            </span>
+            <span class="value">36</span>
+            
+        </div>
+        <div class="states-stat">
+            <span>
+                States Counted
+            </span>
+            <span class="counted-value">0</span>
+            
+        </div>
+        
+        <div class="states-stat">
+            <span>
+                State Left
+            </span>
+            <span class="left-value">0</span>
+        </div>
+        
+    </div>
+
+    
+    <div class="results">
+        <h5>Results by states</h5>
+        <div class="results-pos"></div>
+    </div>
+    <script>
+
+        const results = document.querySelector('.results-pos');
+
+        let build_result_dom = (state, result) => {
+            return `<div class="state">
+                            <span class="name">${state} state</span>
+                                <div class="vote_counts">
+                                    <div>
+                                        <span class="party">PDP</span>
+                                        <span class="count">${result['PDP']}</span>
+                                    </div>
+                                </div>
+                                
+                                <div class="vote_counts">
+                                    <div>
+                                        <span class="party">PDP</span>
+                                        <span class="count">${result['PDP']}</span>
+                                    </div>
+                                </div>
+                                <div class="vote_counts">
+                                    <div>
+                                        <span class="party">APC</span>
+                                        <span class="count">${result['APC']}</span>
+                                    </div>
+                                </div>
+                                <div class="vote_counts">
+                                    <div>
+                                        <span class="party">AAC</span>
+                                        <span class="count">${result['AAC']}</span>
+                                    </div>
+                                </div>
+                                <div class="vote_counts">
+                                    <div>
+                                        <span class="party">ADC</span>
+                                        <span class="count">${result['ADC']}</span>
+                                    </div>
+                                </div>
+                                <div class="vote_counts">
+                                    <div>
+                                        <span class="party">SDP</span>
+                                        <span class="count">${result['SDP']}</span>
+                                    </div>
+                                </div>
+                                <div class="vote_counts">
+                                    <div>
+                                        <span class="party">ADP</span>
+                                        <span class="count">${result['ADP']}</span>
+                                    </div>
+                                </div>
+                        </div>`;
+        }
+
+        let state_stat = (results) => {
+            let total_counted = Object.keys(results).length;
+            document.querySelector('.counted-value').innerHTML = total_counted;
+            document.querySelector('.left-value').innerHTML = 36 - total_counted;
+        }
+
+        let get_results = () => {
+            fetch('/results').then(function (response) {
+
+                return response.json();
+
+            }).then(function (json) {
+                let state_results = json['data'];
+                state_stat(state_results);
+                let results_dom = '';
+                for (state in state_results) {
+                    results_dom +=  build_result_dom(state, state_results[state])
+                
+                }
+                results.innerHTML = results_dom;
+                
+            });
+        }
+
+        setInterval(get_results, 2000);
+
+
+    </script>
+</body>
+
+</html>
