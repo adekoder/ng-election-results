@@ -47,7 +47,7 @@ def collate_result(text):
         party, number_of_votes = party_result_text.split(':')
         result_by_party[party] = number_of_votes.strip()
     
-    return result_by_party
+    return dict(sorted(result_by_party.items(), key=lambda kv: int(''.join(kv[1].split(','))), reverse=True))
 
 
 
