@@ -72,7 +72,7 @@
         }
 
         let build_result_dom = (state, results) => {
-            let dom = `<div class="state" id=${state}>
+            let dom = `<div class="state" id=${state.split(' ')[0]}>
                             <span class="name">${state} state</span>`;
         
             for (party in results){
@@ -139,7 +139,8 @@
         let indicate_winner_by_states = (state_results) => {
             let data = winner_by_state(state_results);
             for (item in data){
-                document.querySelector(`#${item}`).querySelector(`.${data[item]}`).classList.add('highest');
+                console.log(item);
+                document.querySelector(`#${item.split(' ')[0]}`).querySelector(`.${data[item]}`).classList.add('highest');
             }
         }
 
@@ -161,8 +162,8 @@
                 indicate_winner_by_states(state_results);
             });
         }
-        //get_results();
-        setInterval(get_results, 2000);
+        get_results();
+        //setInterval(get_results, 2000);
 
 
     </script>
