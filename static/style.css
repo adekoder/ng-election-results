@@ -22,10 +22,10 @@ html, body{
     display:flex;
     justify-content: space-between;
 }
-.results{
+.result-group{
     width:80%;
     height:auto;
-    margin:20px auto;
+    margin:30px auto;
 }
 
 
@@ -71,3 +71,34 @@ html, body{
     font-size:40px;
     display:block;
 }
+
+.party-stat{
+    margin:20px auto;
+    display:flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+}
+
+.party-result{
+    text-align:center;
+}
+
+.party-result span{
+    font-size:30px;
+    font-weight: 500;
+    display: block;
+}
+
+.party-result small{
+    margin:10px 0px;
+    display: block;
+    font-size:20px;
+    font-weight:bolder;
+}
+
+.highest{
+    background-color:rgb(63, 194, 63);
+    color:#ffffff;
+    padding:5px;
+}
+

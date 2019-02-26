@@ -42,62 +42,105 @@
         </div>
         
     </div>
-
+    <div class="result-group">
+        <h5>Total results by party (so far)</h5>
+        <div class="party-stat">
+            
+        </div>
+    </div>
     
-    <div class="results">
+    <div class="result-group results">
         <h5>Results by states</h5>
         <div class="results-pos"></div>
     </div>
     <script>
 
         const results = document.querySelector('.results-pos');
+        const party_result = document.querySelector('.party-stat');
 
-        let build_result_dom = (state, result) => {
-            return `<div class="state">
-                            <span class="name">${state} state</span>
-                                <div class="vote_counts">
-                                    <div>
-                                        <span class="party">PDP</span>
-                                        <span class="count">${result['PDP']}</span>
-                                    </div>
-                                </div>
-                                <div class="vote_counts">
-                                    <div>
-                                        <span class="party">APC</span>
-                                        <span class="count">${result['APC']}</span>
-                                    </div>
-                                </div>
-                                <div class="vote_counts">
-                                    <div>
-                                        <span class="party">AAC</span>
-                                        <span class="count">${result['AAC']}</span>
-                                    </div>
-                                </div>
-                                <div class="vote_counts">
-                                    <div>
-                                        <span class="party">ADC</span>
-                                        <span class="count">${result['ADC']}</span>
-                                    </div>
-                                </div>
-                                <div class="vote_counts">
-                                    <div>
-                                        <span class="party">SDP</span>
-                                        <span class="count">${result['SDP']}</span>
-                                    </div>
-                                </div>
-                                <div class="vote_counts">
-                                    <div>
-                                        <span class="party">ADP</span>
-                                        <span class="count">${result['ADP']}</span>
-                                    </div>
-                                </div>
-                        </div>`;
+        let vote_count_dom = (party, vote) => {
+            return `<div class="vote_counts">
+                    <div>
+                        <span class="party ${party}" >${party}</span>
+                        <span class="count">${vote}</span>
+                    </div>
+            </div>`;
+        }
+
+        let convert_vote_to_int = (vote) => {
+            return parseInt(vote.split(',').join(''));
+        }
+
+        let build_result_dom = (state, results) => {
+            let dom = `<div class="state" id=${state}>
+                            <span class="name">${state} state</span>`;
+        
+            for (party in results){
+                dom += vote_count_dom(party, results[party])
+            }
+
+            dom += '</div>';
+            return dom;          
+           
+        }
+
+        let winner_by_state = (state_results) => {
+            data = {};
+            for (state in state_results){
+                let current_highest = 0;
+                let leading_party = '';
+                let results = state_results[state];
+                for (party in results){
+                    let vote = convert_vote_to_int(results[party]);
+                    if (current_highest < vote){
+                        current_highest = vote; 
+                        leading_party = party;
+                    }
+                }
+                
+                data[state] = leading_party;
+            }
+            return data;
         }
 
         let state_stat = (results) => {
             let total_counted = Object.keys(results).length;
             document.querySelector('.counted-value').innerHTML = total_counted;
             document.querySelector('.left-value').innerHTML = 36 - total_counted;
+        }
+
+        let result_by_party = (results) => {
+            party_results = Object.values(results);
+            data = {}
+            for (result of party_results){
+                for (party in result){
+                    vote_count = convert_vote_to_int(result[party]);
+                    Object.keys(data).includes(party) ? 
+                            data[party] += vote_count : 
+                            data[party] = vote_count;
+                }
+            }
+
+            return data;
+        }
+
+        let build_result_by_party_dom = (results) => {
+            data = result_by_party(results);
+            let dom = '';
+            for (party in data){
+                dom += `<div class=party-result>
+                        <span>${data[party].toLocaleString(undefined, {maximumFractionDigits:2})}</span>
+                        <small>${party}</small>
+                    </div>`;
+            }
+            party_result.innerHTML = dom;
+        }
+
+        let indicate_winner_by_states = (state_results) => {
+            let data = winner_by_state(state_results);
+            for (item in data){
+                document.querySelector(`#${item}`).querySelector(`.${data[item]}`).classList.add('highest');
+            }
         }
 
         let get_results = () => {
@@ -108,16 +151,17 @@
             }).then(function (json) {
                 let state_results = json['data'];
                 state_stat(state_results);
+                build_result_by_party_dom(state_results);
                 let results_dom = '';
                 for (state in state_results) {
                     results_dom +=  build_result_dom(state, state_results[state])
                 
                 }
                 results.innerHTML = results_dom;
-                
+                indicate_winner_by_states(state_results);
             });
         }
-
+        //get_results();
         setInterval(get_results, 2000);
 
 
