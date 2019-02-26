@@ -45,6 +45,7 @@ html, body{
 .results .state .name{
     font-size: 2em;
     margin: 10px 0px;
+    text-transform: capitalize;
 }
 
 .vote_counts{
