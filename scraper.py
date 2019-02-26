@@ -53,7 +53,7 @@ def collate_result(text):
 
 
 def get_state(text):
-    regex = re.compile('State')
+    regex = re.compile('State|STATE|state')
     result = regex.search(text)
     if result:
         return text[: result.start()].split(':')[-1].strip()
